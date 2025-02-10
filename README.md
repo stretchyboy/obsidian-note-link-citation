@@ -2,6 +2,16 @@
 
 This is a Note Link Citation Plugin for Obsidian (https://obsidian.md).
 
+It Converts an internal link to a 'Book Search' or 'Web Clipper' page into a Harvard citation that still links to the clipping etc.
+
+* Select the whole link eg. a link to a 'Web Clip' of https://github.com/stretchyboy/obsidian-note-link-citation  which looks like `[[obsidian-note-link-citation]]`
+* Right Click
+* Click 'Note link to Citation'
+* Will be converted to `[[obsidian-note-link-citation|('Obsidian Note Link Citation')]]` which looks like a Harvard link but still works and will not break if I convert it again.
+
+
+## Template project info
+
 This project uses TypeScript to provide type checking and documentation.
 The repo depends on the latest plugin API (obsidian.d.ts) in TypeScript Definition format, which contains TSDoc comments describing what it does.
 

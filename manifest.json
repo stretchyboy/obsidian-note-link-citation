@@ -3,8 +3,9 @@
 	"name": "Note Link Citation Plugin",
 	"version": "1.0.0",
 	"minAppVersion": "0.15.0",
-	"description": "Demonstrates some of the capabilities of the Obsidian API.",
-	"author": "Obsidian",
+	"description": "Converts an internal link to a 'Book Search' or 'Web Clipper' page to a Harvard citation that still links to the clipping etc.",
+	"author": "Martyn Eggleton",
 	"authorUrl": "https://github.com/stretchyboy/obsidian-note-link-citation",
 	"isDesktopOnly": false
 }
+ 
