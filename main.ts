@@ -17,6 +17,34 @@ const DEFAULT_SETTINGS: NoteLinkCitationPluginSettings = {
 export default class NoteLinkCitationPlugin extends Plugin {
 	//settings: NoteLinkCitationPluginSettings;
 
+	/**
+	 * 
+	 * */
+	public getCitationLink(linkText: string): string {
+		const oLink = dv.parse(linkText)
+		//console.log("oLink", oLink)
+		
+		const oPage = dv.page(oLink.path)
+		//console.log("oPage", oPage)
+
+		var newText = "[[" + oLink.path + "|("
+		if (oPage.source){
+			newText += "'" + oPage.title + "'"
+			if (oPage.published){
+				const oPublished = window.moment(oPage.published, 'L');
+				newText += ", "+ oPublished.year()
+			}
+		} else {
+			newText += oPage.authors
+			if (oPage.publishDate){
+				newText += ", "+ oPage.publishDate
+			}
+		}
+
+		newText += ")]]" //dv.fileLink(oLink.path, false, oPage.title)
+		return newText
+	}
+
 	async onload() {
 		//await this.loadSettings();
 		
@@ -25,49 +53,28 @@ export default class NoteLinkCitationPlugin extends Plugin {
 			id: 'note-link-citation',
 			name: 'Note link to Citation',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				console.log(editor.getSelection());
-				editor.replaceSelection('Sample Editor Command');
+				if(editor.somethingSelected()){
+					editor.replaceSelection(this.getCitationLink(editor.getSelection()));
+				}
 			}
 		});
 
 		this.registerEvent(
 			this.app.workspace.on("editor-menu", (menu, editor, view) => {
-			  menu.addItem((item) => {
-				item
-				  .setTitle('Note link to Citation')
-				  .setIcon('document')
-				  .onClick(async () => {
-					if(editor.somethingSelected()){
-						const oLink = dv.parse(editor.getSelection())
-						//console.log("oLink", oLink)
-						
-						const oPage = dv.page(oLink.path)
-						//console.log("oPage", oPage)
-
-						var newText = "[[" + oLink.path + "|("
-						if (oPage.source){
-							newText += "'" + oPage.title + "'"
-							if (oPage.published){
-								const oPublished = window.moment(oPage.published, 'L');
-								newText += ", "+ oPublished.year()
-							}
-						} else {
-							newText += oPage.authors
-							if (oPage.publishDate){
-								newText += ", "+ oPage.publishDate
-							}
+			  	menu.addItem((item) => {
+					item
+					.setTitle('Note link to Citation')
+					.setIcon('document')
+					.onClick(async () => {
+						if(editor.somethingSelected()){
+							editor.replaceSelection(this.getCitationLink(editor.getSelection()));
 						}
-
-						newText += ")]]" //dv.fileLink(oLink.path, false, oPage.title)
-						//console.log("newText", newText)
-						editor.replaceSelection(newText);
-					}
-				  });
-			  });
+					});
+				});
 			})
-		  );
+		);
 
-		  // This adds a settings tab so the user can configure various aspects of the plugin
+		// This adds a settings tab so the user can configure various aspects of the plugin
 		//this.addSettingTab(new SampleSettingTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
