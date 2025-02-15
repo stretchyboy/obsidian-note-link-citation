@@ -27,7 +27,7 @@ export default class NoteLinkCitationPlugin extends Plugin {
 		const oPage = dv.page(oLink.path)
 		//console.log("oPage", oPage)
 
-		var newText = "[[" + oLink.path + "|("
+		let newText = "[[" + oLink.path + "|("
 		if (oPage.source){
 			newText += "'" + oPage.title + "'"
 			if (oPage.published){
@@ -58,7 +58,7 @@ export default class NoteLinkCitationPlugin extends Plugin {
 				}
 			}
 		});
-
+		
 		this.registerEvent(
 			this.app.workspace.on("editor-menu", (menu, editor, view) => {
 			  	menu.addItem((item) => {
