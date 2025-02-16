@@ -22,10 +22,15 @@ export default class NoteLinkCitationPlugin extends Plugin {
 	 * */
 	public getCitationLink(linkText: string): string {
 		const oLink = dv.parse(linkText)
-		//console.log("oLink", oLink)
+		console.log("oLink", oLink)
 		
+		// TODO : #8 extract page number from citation and preserve it on update
+		// (Neville, 2009, p. 95)
+
 		const oPage = dv.page(oLink.path)
 		console.log("oPage", oPage)
+
+		// TODO : #7 Convert all **suitable** links in a page
 		if(oPage){
 			let newText = "[[" + oLink.path + "|("
 			if (oPage.source){
@@ -63,15 +68,15 @@ export default class NoteLinkCitationPlugin extends Plugin {
 		*/
 		this.addCommand({
 			id: 'note-link-citations',
-			name: 'Note links to Citations',
+			name: 'Note Links to Citations',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
-				const documentText = editor.getValue();
-				console.log("documentText", documentText)
-				const rresult = documentText.match("\[\[.*\]\]");
-				console.log("rresult", rresult)
-				
-				if(editor.somethingSelected()){
-					editor.replaceSelection(this.getCitationLink(editor.getSelection()));
+				let documentText = editor.getValue();
+				const rresult = documentText.match(/\[\[.*\]\]/gm);
+				if(rresult){
+					rresult.forEach((text) => {
+						documentText = documentText.replace(text, this.getCitationLink(text))
+					})
+					editor.setValue(documentText)
 				}
 			}
 		});
@@ -81,11 +86,10 @@ export default class NoteLinkCitationPlugin extends Plugin {
 			this.app.workspace.on("editor-menu", (menu, editor, view) => {
 			  	menu.addItem((item) => {
 					item
-					.setTitle('Note link to Citations')
+					.setTitle('Note Links to Citations')
 					.setIcon('document')
 					.onClick(async () => {
 						let documentText = editor.getValue();
-						console.log("documentText", documentText)
 						const rresult = documentText.match(/\[\[.*\]\]/gm);
 						if(rresult){
 							rresult.forEach((text) => {
