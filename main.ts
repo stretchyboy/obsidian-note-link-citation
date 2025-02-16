@@ -25,29 +25,31 @@ export default class NoteLinkCitationPlugin extends Plugin {
 		//console.log("oLink", oLink)
 		
 		const oPage = dv.page(oLink.path)
-		//console.log("oPage", oPage)
-
-		let newText = "[[" + oLink.path + "|("
-		if (oPage.source){
-			newText += "'" + oPage.title + "'"
-			if (oPage.published){
-				const oPublished = window.moment(oPage.published, 'L');
-				newText += ", "+ oPublished.year()
+		console.log("oPage", oPage)
+		if(oPage){
+			let newText = "[[" + oLink.path + "|("
+			if (oPage.source){
+				newText += "'" + oPage.title + "'"
+				if (oPage.published){
+					const oPublished = window.moment(oPage.published, 'L');
+					newText += ", "+ oPublished.year()
+				}
+			} else {
+				newText += oPage.authors
+				if (oPage.publishDate){
+					newText += ", "+ oPage.publishDate
+				}
 			}
-		} else {
-			newText += oPage.authors
-			if (oPage.publishDate){
-				newText += ", "+ oPage.publishDate
-			}
+				
+			newText += ")]]" //dv.fileLink(oLink.path, false, oPage.title)
+			return newText
 		}
-
-		newText += ")]]" //dv.fileLink(oLink.path, false, oPage.title)
-		return newText
+		return linkText;
 	}
 
 	async onload() {
 		//await this.loadSettings();
-		
+		/*
 		// This adds an editor command that can perform some operation on the current editor instance
 		this.addCommand({
 			id: 'note-link-citation',
@@ -58,16 +60,38 @@ export default class NoteLinkCitationPlugin extends Plugin {
 				}
 			}
 		});
-		
+		*/
+		this.addCommand({
+			id: 'note-link-citations',
+			name: 'Note links to Citations',
+			editorCallback: (editor: Editor, view: MarkdownView) => {
+				const documentText = editor.getValue();
+				console.log("documentText", documentText)
+				const rresult = documentText.match("\[\[.*\]\]");
+				console.log("rresult", rresult)
+				
+				if(editor.somethingSelected()){
+					editor.replaceSelection(this.getCitationLink(editor.getSelection()));
+				}
+			}
+		});
+
+
 		this.registerEvent(
 			this.app.workspace.on("editor-menu", (menu, editor, view) => {
 			  	menu.addItem((item) => {
 					item
-					.setTitle('Note link to Citation')
+					.setTitle('Note link to Citations')
 					.setIcon('document')
 					.onClick(async () => {
-						if(editor.somethingSelected()){
-							editor.replaceSelection(this.getCitationLink(editor.getSelection()));
+						let documentText = editor.getValue();
+						console.log("documentText", documentText)
+						const rresult = documentText.match(/\[\[.*\]\]/gm);
+						if(rresult){
+							rresult.forEach((text) => {
+								documentText = documentText.replace(text, this.getCitationLink(text))
+							})
+							editor.setValue(documentText)
 						}
 					});
 				});
