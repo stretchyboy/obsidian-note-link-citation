@@ -1,10 +1,10 @@
 {
 	"id": "note-links-citations",
-	"name": "Note Links Citations Plugin",
+	"name": "Note Links Citations",
 	"version": "1.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Converts internal links to 'Book Search' or 'Web Clipper' pages, to a Harvard citation that still links to the clipping etc.",
 	"author": "Martyn Eggleton",
-	"authorUrl": "https://github.com/stretchyboy/obsidian-note-link-citation",
+	"authorUrl": "https://github.com/stretchyboy",
 	"isDesktopOnly": false
 }
