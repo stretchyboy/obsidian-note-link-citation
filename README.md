@@ -1,4 +1,4 @@
-# Obsidian Note Link Citation Plugin
+# Note Links Citations Plugin
 
 This is a Note Link Citation Plugin for Obsidian (https://obsidian.md).
 
