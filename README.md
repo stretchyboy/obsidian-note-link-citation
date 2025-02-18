@@ -10,3 +10,6 @@ It converts all internal links to 'Book Search' or 'Web Clipper' pages into a in
 * If citing a page in a book i.e. (R. T. Dean, 2018, p. 95) the page will be preserved
 
 
+## Credits
+
+This code was started from the Sample Plugin from https://github.com/obsidianmd/obsidian-sample-plugin
