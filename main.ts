@@ -74,7 +74,7 @@ export default class NoteLinkCitationPlugin extends Plugin {
 		*/
 		this.addCommand({
 			id: 'note-link-citations',
-			name: 'Note Links to Citations',
+			name: 'Note links to citations',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
 				let documentText = editor.getValue();
 				const rresult = documentText.match(/\[\[.*\]\]/gm);
@@ -92,7 +92,7 @@ export default class NoteLinkCitationPlugin extends Plugin {
 			this.app.workspace.on("editor-menu", (menu, editor, view) => {
 			  	menu.addItem((item) => {
 					item
-					.setTitle('Note Links to Citations')
+					.setTitle('Note links to citations')
 					.setIcon('document')
 					.onClick(async () => {
 						let documentText = editor.getValue();
@@ -109,7 +109,7 @@ export default class NoteLinkCitationPlugin extends Plugin {
 		);
 
 		// This adds a settings tab so the user can configure various aspects of the plugin
-		//this.addSettingTab(new SampleSettingTab(this.app, this));
+		//this.addSettingTab(new NLCSettingTab(this.app, this));
 
 		// If the plugin hooks up any global DOM events (on parts of the app that doesn't belong to this plugin)
 		// Using this function will automatically remove the event listener when this plugin is disabled.
@@ -135,7 +135,7 @@ export default class NoteLinkCitationPlugin extends Plugin {
 }
 /*
 
-class SampleModal extends Modal {
+class NLCModal extends Modal {
 	constructor(app: App) {
 		super(app);
 	}
@@ -150,7 +150,7 @@ class SampleModal extends Modal {
 		contentEl.empty();
 	}
 }
-class SampleSettingTab extends PluginSettingTab {
+class NLCSettingTab extends PluginSettingTab {
 	plugin: NoteLinkCitationPlugin;
 
 	constructor(app: App, plugin: NoteLinkCitationPlugin) {
