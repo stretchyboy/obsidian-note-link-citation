@@ -1,7 +1,7 @@
 {
 	"id": "sample-plugin",
 	"name": "Note Link Citation Plugin",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"minAppVersion": "0.15.0",
 	"description": "Converts an internal link to a 'Book Search' or 'Web Clipper' page to a Harvard citation that still links to the clipping etc.",
 	"author": "Martyn Eggleton",
