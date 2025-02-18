@@ -22,31 +22,37 @@ export default class NoteLinkCitationPlugin extends Plugin {
 	 * */
 	public getCitationLink(linkText: string): string {
 		const oLink = dv.parse(linkText)
-		console.log("oLink", oLink)
-		
-		// TODO : #8 extract page number from citation and preserve it on update
-		// (Neville, 2009, p. 95)
 
+		let pageNumber = 0
+		if ("display" in oLink && oLink.display){
+			const pageLinkMatches =  oLink.display.match(/, p. ?([0-9+]+)\)/);
+			if(pageLinkMatches){
+				pageNumber = parseInt(pageLinkMatches[1])
+			}
+		}
+			
 		const oPage = dv.page(oLink.path)
-		console.log("oPage", oPage)
-
-		// TODO : #7 Convert all **suitable** links in a page
-		if(oPage){
+		
+		if(oPage && ("source" in oPage || "authors" in oPage)){
 			let newText = "[[" + oLink.path + "|("
-			if (oPage.source){
+			if ("source" in oPage && oPage.source){
 				newText += "'" + oPage.title + "'"
 				if (oPage.published){
 					const oPublished = window.moment(oPage.published, 'L');
 					newText += ", "+ oPublished.year()
 				}
-			} else {
+			} else if ("authors" in oPage && oPage.authors) {
 				newText += oPage.authors
 				if (oPage.publishDate){
 					newText += ", "+ oPage.publishDate
 				}
+			
+				if (pageNumber){
+					newText += ", p. "+ pageNumber
+				}
 			}
 				
-			newText += ")]]" //dv.fileLink(oLink.path, false, oPage.title)
+			newText += ")]]" 
 			return newText
 		}
 		return linkText;
