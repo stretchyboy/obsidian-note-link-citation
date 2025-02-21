@@ -17,6 +17,14 @@ It converts all internal links to 'Book Search' or 'Web Clipper' pages into a in
 
 ## Installation
 
+# Installation
+
+The plugin is available in beta through BRAT:
+1. Install and enable the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat) in your vault.
+2. Navigate to `Settings > BRAT > Beta Plugin List > Add Beta Plugin`.
+3. Enter `https://github.com/stretchyboy/obsidian-note-link-citation` into the input field and select `Add Plugin`.
+
+<!--
 ### From within Obsidian
 
 1.  Open Obsidian Settings (`Ctrl+,` or `Cmd+,`).
@@ -25,6 +33,7 @@ It converts all internal links to 'Book Search' or 'Web Clipper' pages into a in
 4.  Search for "Note Links Citations".
 5.  Click **Install**.
 6.  After installation, go to the **Installed plugins** tab and enable the "Note Links Citations" plugin.
+-->
 
 ### Manual Installation
 
