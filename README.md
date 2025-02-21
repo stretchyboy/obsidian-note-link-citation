@@ -13,11 +13,9 @@ It converts all internal links to 'Book Search' or 'Web Clipper' pages into a in
 * Will be converted to `[[obsidian-note-link-citation|('Obsidian Note Link Citation')]]` which looks like a Harvard link but still works and will not break if I convert it again.
 * If citing a page in a book i.e. (R. T. Dean, 2018, p. 95) the page will be preserved
 
-
-
 ## Installation
 
-# Installation
+### BRAT
 
 The plugin is available in beta through BRAT:
 1. Install and enable the [BRAT plugin](https://github.com/TfTHacker/obsidian42-brat) in your vault.
