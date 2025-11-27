@@ -11,7 +11,7 @@ interface NoteLinkCitationPluginSettings {
 
 const DEFAULT_SETTINGS: NoteLinkCitationPluginSettings = {
 	mySetting: 'default'
-}
+} 
 */
 
 export default class NoteLinkCitationPlugin extends Plugin {
@@ -20,16 +20,16 @@ export default class NoteLinkCitationPlugin extends Plugin {
 	/**
 	 * 
 	 * */
-	public getCitationLink(linkText: string): string {
+	public getCitationLink(linkText: string, withExternal: boolean = false): string {
 		const oLink = dv.parse(linkText)
-
+		let externalLink = ""
 		let pageNumber = 0
 		if ("display" in oLink && oLink.display){
 			const pageLinkMatches =  oLink.display.match(/, p. ?([0-9+]+)\)/);
 			if(pageLinkMatches){
 				pageNumber = parseInt(pageLinkMatches[1])
 			}
-		}
+		} 
 			
 		const oPage = dv.page(oLink.path)
 		
@@ -41,6 +41,7 @@ export default class NoteLinkCitationPlugin extends Plugin {
 					const oPublished = window.moment(oPage.published, 'L');
 					newText += ", "+ oPublished.year()
 				}
+				externalLink = "[➡️]("+oPage.source+")"
 			} else if ("authors" in oPage && oPage.authors) {
 				newText += oPage.authors
 				if (oPage.publishDate){
@@ -53,6 +54,10 @@ export default class NoteLinkCitationPlugin extends Plugin {
 			}
 				
 			newText += ")]]" 
+			if (withExternal){
+				newText += externalLink
+			}
+
 			return newText
 		}
 		return linkText;
@@ -77,7 +82,8 @@ export default class NoteLinkCitationPlugin extends Plugin {
 			name: 'Note links to citations',
 			editorCallback: (editor: Editor, view: MarkdownView) => {
 				let documentText = editor.getValue();
-				const rresult = documentText.match(/\[\[.*\]\]/gm);
+				const rresult = documentText.match(/\[\[.*\]\]?/gm);
+				//const rresult = documentText.match(/\[\[.*\]\](\[\-\>]\([^\)]+\))?/gm);
 				if(rresult){
 					rresult.forEach((text) => {
 						documentText = documentText.replace(text, this.getCitationLink(text))
@@ -87,16 +93,34 @@ export default class NoteLinkCitationPlugin extends Plugin {
 			}
 		});
 
+				this.addCommand({
+			id: 'note-link-citations-ext',
+			name: 'Note links to citations and external',
+			editorCallback: (editor: Editor, view: MarkdownView) => {
+				let documentText = editor.getValue();
+				const rresult = documentText.match(/\[\[.*\]\]?/gm);
+				//const rresult = documentText.match(/\[\[.*\]\](\[\-\>]\([^\)]+\))?/gm);
+				if(rresult){
+					rresult.forEach((text) => {
+						documentText = documentText.replace(text, this.getCitationLink(text, true))
+					})
+					editor.setValue(documentText)
+				}
+			}
+		});
+
 
 		this.registerEvent(
 			this.app.workspace.on("editor-menu", (menu, editor, view) => {
-			  	menu.addItem((item) => {
+			  	
+				menu.addItem((item) => {
 					item
 					.setTitle('Note links to citations')
 					.setIcon('document')
 					.onClick(async () => {
 						let documentText = editor.getValue();
-						const rresult = documentText.match(/\[\[.*\]\]/gm);
+						//const rresult = documentText.match(/\[\[.*\]\](\[\-\>]\([^\)]+\))?/gm);
+						const rresult = documentText.match(/\[\[.*\]\]/gm); 
 						if(rresult){
 							rresult.forEach((text) => {
 								documentText = documentText.replace(text, this.getCitationLink(text))
@@ -105,6 +129,24 @@ export default class NoteLinkCitationPlugin extends Plugin {
 						}
 					});
 				});
+
+				menu.addItem((item) => {
+					item
+					.setTitle('Note links to citations with external')
+					.setIcon('document')
+					.onClick(async () => {
+						let documentText = editor.getValue();
+						//const rresult = documentText.match(/\[\[.*\]\](\[\-\>]\([^\)]+\))?/gm);
+						const rresult = documentText.match(/\[\[.*\]\]/gm); 
+						if(rresult){
+							rresult.forEach((text) => {
+								documentText = documentText.replace(text, this.getCitationLink(text, true))
+							})
+							editor.setValue(documentText)
+						}
+					});
+				});
+				
 			})
 		);
 
